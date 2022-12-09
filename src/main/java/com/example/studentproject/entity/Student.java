@@ -12,6 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "student")
+@NamedQueries({
+        @NamedQuery(name = "findStudentByName",
+        query = "select s from Student s where s.name =?1")
+})
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +47,15 @@ public class Student {
         this.name = name;
         this.age = age;
         this.school = school;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", school='" + school + '\'' +
+                '}';
     }
 }

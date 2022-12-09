@@ -1,15 +1,17 @@
 package com.example.studentproject.service;
 
-import com.example.studentproject.dao.ProvinceDao;
-import com.example.studentproject.dao.StudentSubjectDao;
-import com.example.studentproject.dao.SubjectDao;
+import com.example.studentproject.dao.*;
 import com.example.studentproject.entity.Province;
 import com.example.studentproject.entity.Student;
 import com.example.studentproject.entity.StudentSubject;
 import com.example.studentproject.entity.Subject;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -19,6 +21,29 @@ public class StudentService {
     private SubjectDao subjectDao;
     @Autowired
     private StudentSubjectDao studentSubjectDao;
+    @Autowired
+    private StudentDao studentDao;
+
+    public Student findStudentByName(String name){
+        return studentDao.findStudentByName(name)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    public List<ProvinceDto> listProvinceInfo(){
+        return studentSubjectDao.findProvinceInfo();
+    }
+
+    public StudentDto findStudentDtoByMaxMarksInSubject(String subjectName){
+        return studentSubjectDao.findStudentInfoMaxMarks(subjectName)
+                .orElseThrow(EntityExistsException::new);
+    }
+
+    public Iterable<StudentDto> listStudentInfo(){
+
+        return studentSubjectDao.findStudentInfo();
+    }
+
+
 
     @Transactional
     public void createDb(){

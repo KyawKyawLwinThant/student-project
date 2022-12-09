@@ -1,5 +1,6 @@
 package com.example.studentproject;
 
+import com.example.studentproject.dao.StudentDto;
 import com.example.studentproject.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,6 +18,53 @@ public class StudentProjectApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         studentService.createDb();
+        System.out.println("Student Info::");
+        studentService.listStudentInfo()
+                        .forEach(s ->{
+                            System.out.println(
+                                    String.format("%s lives in %s got %s marks in subject %s",
+                                            s.getStudentName(),
+                                            s.getProvinceName(),
+                                            s.getMarks(),
+                                            s.getSubjectName()
+                                            )
+                            );
+                        });
+        System.out.println();
+        System.out.println("Max Marks in Subject");
+        StudentDto studentDto =studentService
+                .findStudentDtoByMaxMarksInSubject("Java");
+        System.out.println(studentDto);
+
+        System.out.println();
+        System.out.println("Province Info::");
+        studentService.listProvinceInfo()
+                        .forEach(p ->{
+                            System.out.println(
+                                    String.format("%s province lives in %s persons.",
+                                            p.provinceName()
+                                    ,p.count())
+                            );
+                        });
+        System.out.println();
+        System.out.println("Student by Name NamedQuery");
+        System.out.println(studentService.findStudentByName("Thomas Hardy"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         JPAUtil.checkData("select * from province");
         JPAUtil.checkData("select * from student");
         JPAUtil.checkData("select * from student_subject");
